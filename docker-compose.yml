@@ -9,3 +9,22 @@ services:
         volumes:
             - ./frontend:/app
             - ./frontend/docker/development/nginx/conf.d:/etc/nginx/conf.d
+
+    api:
+        build:
+            context: api/docker/development/nginx
+        ports:
+            - 8081:80
+        volumes:
+            - ./api:/app
+            - ./api/docker/development/nginx/conf.d:/etc/nginx/conf.d
+        depends_on:
+            - api-php-fpm
+
+    api-php-fpm:
+        build:
+            context: api/docker/development/php-fpm
+        volumes:
+            - ./api:/app
+        ports:
+            - 9000:9000
